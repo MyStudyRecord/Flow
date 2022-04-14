@@ -5,26 +5,44 @@ import android.os.Bundle
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     companion object{
-        private const val TAG = "MainActivity"
+        private const val TAG = "MainTag"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        printUser()
+   /*     printUser()
         Log.d(TAG, "print user completed")
 
         //suspend
         CoroutineScope(Dispatchers.IO).launch {
             printUserList()
         }
-        Log.d(TAG, "print userList completed for suspend fun")
+        Log.d(TAG, "print userList completed for suspend fun")*/
 
+        //simple flow
+        CoroutineScope(IO).launch {
+            simpleFlow().collect { user ->
+                Log.d(TAG, user)
+            }
+        }
+    }
+
+    private fun simpleFlow() : Flow<String> = flow {
+        userList.forEach { user ->
+            emit(user)
+            delay(500)
+        }
     }
 
     private fun printUser(){
