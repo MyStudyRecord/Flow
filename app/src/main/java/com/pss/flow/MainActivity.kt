@@ -32,8 +32,21 @@ class MainActivity : AppCompatActivity() {
 
         //simple flow
         CoroutineScope(IO).launch {
-            simpleFlow().collect { user ->
-                Log.d(TAG, user)
+            launch {
+                simpleFlow().collect { user ->
+                    Log.d(TAG, "Flow1 $user")
+                }
+            }
+            launch {
+                simpleFlow().collect { user ->
+                    Log.d(TAG, "Flow2 $user")
+                }
+            }
+
+            launch {
+                simpleFlow().collect { user ->
+                    Log.d(TAG, "Flow3 $user")
+                }
             }
         }
     }
