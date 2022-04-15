@@ -7,9 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "print userList completed for suspend fun")*/
 
         //simple flow
-        CoroutineScope(IO).launch {
+/*        CoroutineScope(IO).launch {
             launch {
                 simpleFlow().collect { user ->
                     Log.d(TAG, "Flow1 $user")
@@ -46,6 +44,19 @@ class MainActivity : AppCompatActivity() {
             launch {
                 simpleFlow().collect { user ->
                     Log.d(TAG, "Flow3 $user")
+                }
+            }
+        }*/
+
+        CoroutineScope(IO).launch {
+            launch {
+                flowUserList.collect{ user ->
+                    Log.d(TAG, "Flow2 $user")
+                }
+            }
+            launch {
+                userList.asFlow().collect{ user ->
+                    Log.d(TAG, "Flow2 $user")
                 }
             }
         }
