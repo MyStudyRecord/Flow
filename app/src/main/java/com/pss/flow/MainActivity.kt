@@ -3,12 +3,10 @@ package com.pss.flow
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     companion object{
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d(TAG, "print userList completed for suspend fun")*/
 
-        //simple flow
+        //Flow 여러번 collect 방법
 /*        CoroutineScope(IO).launch {
             launch {
                 simpleFlow().collect { user ->
@@ -48,7 +46,8 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
-        CoroutineScope(IO).launch {
+        //Flow Builder
+/*        CoroutineScope(IO).launch {
             launch {
                 flowUserList.collect{ user ->
                     Log.d(TAG, "Flow2 $user")
@@ -59,13 +58,36 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "Flow2 $user")
                 }
             }
-        }
+        }*/
+
+        //Flow cancel
+/*        CoroutineScope(IO).launch {
+            launch {
+                //권장 X
+            *//*    withTimeoutOrNull(5000){
+                    simpleFlow().collect{ user ->
+                        Log.d(TAG, "Flow1 $user")
+                    }
+                }*//*
+
+                simpleFlow().collect{ user ->
+                    Log.d(TAG, "Flow1 $user")
+                }
+            }
+        }*/
+        //뒤로가기로 앱을 나갈 때 실행 종료 됨
+/*        lifecycleScope.launch(Dispatchers.IO) {
+            simpleFlow().collect{ user ->
+                Log.d(TAG, "Flow1 $user")
+            }
+        }*/
+
     }
 
     private fun simpleFlow() : Flow<String> = flow {
         userList.forEach { user ->
             emit(user)
-            delay(500)
+            delay(1500)
         }
     }
 
